@@ -2,6 +2,7 @@ package com.macsoftex.android_tools;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,7 +61,7 @@ public class FileOperations
         return sb.toString();
     }
 
-    public static String loadTextFileFromAsset(final String path, Context ctx)
+    public static String loadTextFileFromAsset(String path, Context ctx)
     {
         String str = null;
 
@@ -72,6 +73,23 @@ public class FileOperations
             is.close();
         }
         catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return str;
+    }
+
+    public static String loadTextFileFromRaw(int id, Context ctx)
+    {
+        String str = null;
+
+        try
+        {
+            InputStream is = ctx.getResources().openRawResource(id);
+            str = getStringFromInputStream(is);
+        }
+        catch (Resources.NotFoundException e)
         {
             e.printStackTrace();
         }
@@ -114,7 +132,7 @@ public class FileOperations
         }
     }
 
-    public static String loadTextFileFromInternalStorage(final String fileName, Context ctx)
+    public static String loadTextFileFromInternalStorage(String fileName, Context ctx)
     {
         String text = null;
 
@@ -132,12 +150,12 @@ public class FileOperations
         return text;
     }
 
-    public static String getValidFileName(final String str)
+    public static String getValidFileName(String str)
     {
         return str.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
     }
 
-    public static void saveObjectToInternalStorage(final String fileName, final Object object, Context ctx)
+    public static void saveObjectToInternalStorage(String fileName, Object object, Context ctx)
     {
         try
         {
@@ -156,7 +174,7 @@ public class FileOperations
         }
     }
 
-    public static Object loadObjectFromInternalStorage(final String fileName, Context ctx)
+    public static Object loadObjectFromInternalStorage(String fileName, Context ctx)
     {
         Object returnObject = null;
 
