@@ -1,4 +1,4 @@
 android-tools
 =============
 
-Android Tools
+Android Tools (Android Studio Project Library)
