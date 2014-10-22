@@ -97,17 +97,17 @@ public class FileOperations
         return str;
     }
 
-    public static void saveTextFileToInternalStorage(final String fileName, final String text, Context ctx)
+    public static void saveTextFile(File file, String text)
     {
-        if (text==null)
+        if (file==null || text==null)
             return;
 
         FileOutputStream f = null;
 
         try
         {
-            f = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
-            f.write(text.getBytes());
+            f = new FileOutputStream( file );
+            f.write( text.getBytes() );
             f.flush();
         }
         catch (FileNotFoundException e)
@@ -132,13 +132,13 @@ public class FileOperations
         }
     }
 
-    public static String loadTextFileFromInternalStorage(String fileName, Context ctx)
+    public static String loadTextFile( File file )
     {
         String text = null;
 
         try
         {
-            FileInputStream f = ctx.openFileInput(fileName);
+            FileInputStream f = new FileInputStream( file );
             text = getStringFromInputStream( f );
             f.close();
         }
@@ -150,9 +150,18 @@ public class FileOperations
         return text;
     }
 
-    public static String getValidFileName(String str)
+    public static void saveTextFileToInternalStorage(final String fileName, final String text, Context ctx)
     {
-        return str.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
+        File file = ctx.getFileStreamPath( fileName );
+
+        saveTextFile(file, text);
+    }
+
+    public static String loadTextFileFromInternalStorage(String fileName, Context ctx)
+    {
+        File file = ctx.getFileStreamPath( fileName );
+
+        return loadTextFile( file );
     }
 
     public static void saveObjectToInternalStorage(String fileName, Object object, Context ctx)
@@ -202,6 +211,11 @@ public class FileOperations
         }
 
         return returnObject;
+    }
+
+    public static String getValidFileName(String str)
+    {
+        return str.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
     }
 
     public static boolean copyFile(File src, File dst)
