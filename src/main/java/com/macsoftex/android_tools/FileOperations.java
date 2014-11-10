@@ -246,4 +246,21 @@ public class FileOperations
 
         return dst.exists();
     }
+
+    public static boolean deleteFile(File file)
+    {
+        if ( file.isDirectory() )
+        {
+            String[] children = file.list();
+
+            for (String child : children)
+                deleteFile( new File(file, child) );
+        }
+        else
+        {
+            file.delete();
+        }
+
+        return file.exists();
+    }
 }
