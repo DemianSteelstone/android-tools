@@ -21,7 +21,7 @@ import java.io.OutputStream;
  */
 public class FileOperations
 {
-    private static String getStringFromInputStream(InputStream is)
+    public static String getStringFromInputStream(InputStream is)
     {
 
         BufferedReader br = null;

@@ -9,42 +9,39 @@ import java.net.URL;
 /**
  * Created by alex-v on 12.11.14.
  */
-public abstract class HttpRequest extends AsyncTask<String, Void, String>
+public abstract class HttpRequest
 {
-    @Override
-    protected String doInBackground(String... urls)
+    public void get(String url)
     {
-        if (urls.length != 1)
-            return null;
+        new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... urls)
+            {
+                if (urls.length != 1)
+                    return null;
 
-        String response = null;
+                String response = null;
 
-        try
-        {
-            StringBuffer stringBuffer = new StringBuffer();
-            URL url = new URL( urls[0] );
-            BufferedReader in = new BufferedReader( new InputStreamReader( url.openStream() ) );
-            String inputLine;
+                try
+                {
+                    URL url = new URL( urls[0] );
+                    response = FileOperations.getStringFromInputStream( url.openStream() );
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
-            while ((inputLine = in.readLine()) != null)
-                stringBuffer.append(inputLine + "\n");
+                return response;
+            }
 
-            in.close();
-            response = stringBuffer.toString();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return response;
+            @Override
+            protected void onPostExecute(String response)
+            {
+                HttpRequest.this.onResponseReceived( response );
+            }
+        }.execute( url );
     }
 
-    public abstract void onResponseReceived(String response);
-
-    @Override
-    protected void onPostExecute(String response)
-    {
-        this.onResponseReceived( response );
-    }
+    protected abstract void onResponseReceived(String response);
 }
