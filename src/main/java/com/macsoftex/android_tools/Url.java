@@ -1,6 +1,7 @@
 package com.macsoftex.android_tools;
 
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
 import java.io.File;
@@ -22,13 +23,7 @@ public class Url
 
     public static String getFileNameExtensionFromUrl(final String url)
     {
-        Uri uri = Uri.parse( url );
-        String path = uri.getPath();
-
-        if (path.lastIndexOf(".") != -1)
-            return path.substring(path.lastIndexOf(".") + 1);
-
-        return null;
+        return MimeTypeMap.getFileExtensionFromUrl( url );
     }
 
     private static String createUrl(String scheme, String host, String path, String query, String fragment)

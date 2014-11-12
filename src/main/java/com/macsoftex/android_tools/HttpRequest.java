@@ -2,8 +2,13 @@ package com.macsoftex.android_tools;
 
 import android.os.AsyncTask;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.net.URL;
 
 /**
@@ -11,28 +16,45 @@ import java.net.URL;
  */
 public abstract class HttpRequest
 {
+    private String userAgent = null;
+
+    public void setUserAgent(String userAgent)
+    {
+        this.userAgent = userAgent;
+    }
+
     public void get(String url)
     {
-        new AsyncTask<String, Void, String>() {
-            @Override
-            protected String doInBackground(String... urls)
-            {
-                if (urls.length != 1)
-                    return null;
+        HttpGet httpGet = new HttpGet( url );
+        this.sendRequest( httpGet );
+    }
 
-                String response = null;
+    private void sendRequest(final HttpRequestBase httpMethod)
+    {
+        if (this.userAgent != null)
+            httpMethod.setHeader("User-Agent", this.userAgent);
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params)
+            {
+                String responseText = null;
+                HttpClient httpclient = new DefaultHttpClient();
 
                 try
                 {
-                    URL url = new URL( urls[0] );
-                    response = FileOperations.getStringFromInputStream( url.openStream() );
+                    HttpResponse response = httpclient.execute( httpMethod );
+                    HttpEntity entity = response.getEntity();
+
+                    if (entity != null)
+                        responseText = FileOperations.getStringFromInputStream( entity.getContent() );
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
                 }
 
-                return response;
+                return responseText;
             }
 
             @Override
@@ -40,7 +62,7 @@ public abstract class HttpRequest
             {
                 HttpRequest.this.onResponseReceived( response );
             }
-        }.execute( url );
+        }.execute();
     }
 
     protected abstract void onResponseReceived(String response);

@@ -35,7 +35,10 @@ public class FileOperations
 
             while ((line = br.readLine()) != null)
             {
-                sb.append(line).append("\n");
+                if (sb.toString().length() != 0)
+                    sb.append("\n");
+
+                sb.append(line);
             }
 
         }
