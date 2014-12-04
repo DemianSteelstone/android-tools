@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.Surface;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Created by alex-v on 30.09.14.
@@ -51,5 +53,13 @@ public class ActivityTools
         }
 
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+    }
+
+    public void hideKeyboard(Activity activity)
+    {
+        View view = activity.getCurrentFocus();
+
+        if (view != null)
+            ((InputMethodManager)activity.getSystemService(activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

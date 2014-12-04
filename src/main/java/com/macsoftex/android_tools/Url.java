@@ -5,8 +5,10 @@ import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by alex-v on 25.09.14.
@@ -112,4 +114,42 @@ public class Url
         return null;
     }
 
+    public interface ValidHostResultEvent
+    {
+        public void validHostResult(boolean valid);
+    }
+
+    public static void isValidHost(final String host, final ValidHostResultEvent handler)
+    {
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    InetAddress res = InetAddress.getByName( host );
+                    handler.validHostResult( true );
+                }
+                catch (Exception e)
+                {
+                    handler.validHostResult( false );
+                }
+            }
+        }).start();
+    }
+
+    public static String getGoogleSearchUrl(String searchText)
+    {
+        String query;
+
+        try
+        {
+            query = URLEncoder.encode(searchText, "utf-8");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return "http://www.google.by/search?q=" + query;
+    }
 }
