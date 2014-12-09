@@ -55,7 +55,7 @@ public class ActivityTools
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
-    public void hideKeyboard(Activity activity)
+    public static void hideKeyboard(Activity activity)
     {
         View view = activity.getCurrentFocus();
 
