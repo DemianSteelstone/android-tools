@@ -216,9 +216,19 @@ public class FileOperations
         return returnObject;
     }
 
-    public static String getValidFileName(String str)
+    public static String getValidFileName(String fileName)
     {
-        return str.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
+        return fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
+    }
+
+    public static String getFileNameWithoutExtension(String fileName)
+    {
+        int pos = fileName.lastIndexOf('.');
+
+        if (pos > 0)
+            return fileName.substring(0, pos);
+
+        return fileName;
     }
 
     public static boolean copyFile(File src, File dst)

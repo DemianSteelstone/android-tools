@@ -27,4 +27,18 @@ public class Media
             e.printStackTrace();
         }
     }
+
+    public static void openImageWithOtherApp(Uri uri, Context ctx)
+    {
+        try
+        {
+            Intent i = new Intent( Intent.ACTION_VIEW );
+            i.setDataAndType(uri, "image/*");
+            ctx.startActivity( i );
+        }
+        catch (ActivityNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

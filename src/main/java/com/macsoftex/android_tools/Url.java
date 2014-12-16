@@ -22,6 +22,9 @@ public class Url
         Uri uri = Uri.parse( url );
         String path = uri.getPath();
 
+        if (path == null)
+            return null;
+
         return new File( path ).getName();
     }
 
