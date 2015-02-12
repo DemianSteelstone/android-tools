@@ -160,7 +160,13 @@ public class Url
 
     public static String getShortHost(String url)
     {
-        String host = Uri.parse( url ).getHost().toLowerCase();
+        String host = Uri.parse( url ).getHost();
+
+        if (host == null)
+            return null;
+
+        host = host.toLowerCase();
+
         String[] parts = host.split("\\.");
         final int n = parts.length;
 
