@@ -7,7 +7,7 @@ import android.net.Uri;
 /**
  * Created by alex-v on 13.11.14.
  */
-public class Market
+public class MarketTools
 {
     public static void openApplicationPageInGooglePlayMarket(Context ctx, String appPackageName)
     {
@@ -18,7 +18,6 @@ public class Market
         catch (android.content.ActivityNotFoundException e)
         {
             e.printStackTrace();
-
         }
     }
 }

@@ -5,9 +5,8 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +18,7 @@ import java.io.OutputStream;
 /**
  * Created by alex-v on 23.09.14.
  */
-public class FileOperations
+public class FileTools
 {
     public static String getStringFromInputStream(InputStream is)
     {
@@ -64,6 +63,28 @@ public class FileOperations
         return sb.toString();
     }
 
+    public static byte[] getBytesFromInputStream(InputStream inputStream)
+    {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        try
+        {
+            byte[] buffer = new byte[ 1024 ];
+
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1)
+            {
+                byteBuffer.write(buffer, 0, len);
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return byteBuffer.toByteArray();
+    }
+
     public static String loadTextFileFromAsset(String path, Context ctx)
     {
         String str = null;
@@ -71,7 +92,7 @@ public class FileOperations
         try
         {
             AssetManager am = ctx.getAssets();
-            InputStream is = am.open( path );
+            InputStream is = am.open(path);
             str = getStringFromInputStream( is );
             is.close();
         }
@@ -100,7 +121,7 @@ public class FileOperations
         return str;
     }
 
-    public static void saveTextFile(File file, String text)
+    public static void saveTextFile(java.io.File file, String text)
     {
         if (file==null || text==null)
             return;
@@ -113,29 +134,27 @@ public class FileOperations
             f.write( text.getBytes() );
             f.flush();
         }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
         catch (IOException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
+            if (f != null)
             {
-                if (f != null)
+                try
+                {
                     f.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public static String loadTextFile( File file )
+    public static String loadTextFile( java.io.File file )
     {
         String text = null;
 
@@ -155,15 +174,13 @@ public class FileOperations
 
     public static void saveTextFileToInternalStorage(final String fileName, final String text, Context ctx)
     {
-        File file = ctx.getFileStreamPath( fileName );
-
+        java.io.File file = ctx.getFileStreamPath( fileName );
         saveTextFile(file, text);
     }
 
     public static String loadTextFileFromInternalStorage(String fileName, Context ctx)
     {
-        File file = ctx.getFileStreamPath( fileName );
-
+        java.io.File file = ctx.getFileStreamPath( fileName );
         return loadTextFile( file );
     }
 
@@ -192,17 +209,13 @@ public class FileOperations
 
         try
         {
-            FileInputStream f = ctx.openFileInput( fileName );
+            FileInputStream f = ctx.openFileInput(fileName);
 
             ObjectInputStream obj = new ObjectInputStream(f);
             returnObject = obj.readObject();
             obj.close();
 
             f.close();
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
         }
         catch (IOException e)
         {
@@ -223,7 +236,7 @@ public class FileOperations
 
     public static String getFileNameWithoutExtension(String fileName)
     {
-        int pos = fileName.lastIndexOf('.');
+        final int pos = fileName.lastIndexOf('.');
 
         if (pos > 0)
             return fileName.substring(0, pos);
@@ -231,9 +244,21 @@ public class FileOperations
         return fileName;
     }
 
-    public static boolean copyFile(File src, File dst)
+    public static boolean copyFile(java.io.File src, java.io.File dst)
     {
-        dst.delete();
+        return copyFile(src, dst, true);
+    }
+
+    public static boolean copyFile(java.io.File src, java.io.File dst, boolean overwrite)
+    {
+        if ( dst.exists() )
+        {
+            if ( overwrite )
+                dst.delete();
+
+            if ( dst.exists() )
+                return false;
+        }
 
         try
         {
@@ -260,14 +285,14 @@ public class FileOperations
         return dst.exists();
     }
 
-    public static boolean deleteFile(File file)
+    public static boolean deleteFile(java.io.File file)
     {
         if ( file.isDirectory() )
         {
             String[] children = file.list();
 
             for (String child : children)
-                deleteFile( new File(file, child) );
+                deleteFile( new java.io.File(file, child) );
         }
         else
         {

@@ -1,6 +1,5 @@
 package com.macsoftex.android_tools;
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.Surface;
@@ -12,26 +11,10 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class ActivityTools
 {
-    public static boolean isTablet(Activity activity)
+    private static int getScreenOrientation(android.app.Activity activity)
     {
-        return (activity.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
-
-    public static void lockOrientation(Activity activity)
-    {
-        int orientation = getScreenOrientation( activity );
-        activity.setRequestedOrientation( orientation );
-    }
-
-    public static void unlockOrientation(Activity activity)
-    {
-        activity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
-    }
-
-    private static int getScreenOrientation(Activity activity)
-    {
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        int orientation = activity.getResources().getConfiguration().orientation;
+        final int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        final int orientation = activity.getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
         {
@@ -40,26 +23,43 @@ public class ActivityTools
             else
                 return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
         }
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+        else if (orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
-            int landscape = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-            int landscape_reverse = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-
             if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90)
-                return landscape;
+                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             else
-                return landscape_reverse;
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
         }
 
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
-    public static void hideKeyboard(Activity activity)
+    public static boolean isTablet(android.app.Activity activity)
     {
-        View view = activity.getCurrentFocus();
+        return (activity.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static void lockOrientation(android.app.Activity activity)
+    {
+        final int orientation = getScreenOrientation( activity );
+        activity.setRequestedOrientation( orientation );
+    }
+
+    public static void unlockOrientation(android.app.Activity activity)
+    {
+        activity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
+    }
+
+    public static void hideKeyboard(android.app.Activity activity)
+    {
+        final View view = activity.getCurrentFocus();
 
         if (view != null)
-            ((InputMethodManager)activity.getSystemService(activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        {
+            final InputMethodManager manager = (InputMethodManager)activity.getSystemService( android.app.Activity.INPUT_METHOD_SERVICE );
+
+            if (manager != null)
+                manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }

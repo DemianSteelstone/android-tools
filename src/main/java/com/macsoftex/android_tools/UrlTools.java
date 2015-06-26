@@ -6,15 +6,15 @@ import android.webkit.URLUtil;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 
 /**
  * Created by alex-v on 25.09.14.
  */
-public class Url
+public class UrlTools
 {
+    private static final String GOOGLE_SEARCH_URL = "http://www.google.by/search?q=";
+
     private static final String[] LEVEL_1_DOMAINS = {"biz", "com", "edu", "gov", "info", "jobs", "mobi", "name", "net", "org", "pro", "tel", "xxx", "ac", "ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "as", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bm", "bn", "bo", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "cr", "cs", "cu", "cv", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "mg", "mh", "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "ms", "mt", "mu", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "ps", "pt", "pw", "py", "qa", "re", "ro", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "st", "su", "sv", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "ye", "yt", "yu", "za", "zm", "zw"};
 
     public static String getFileNameFromUrl(final String url)
@@ -84,7 +84,7 @@ public class Url
         {
             if (relativeUri.getHost() != null)
             {
-                return Url.createUrl(baseUri.getScheme(), relativeUri.getAuthority(), relativeUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
+                return UrlTools.createUrl(baseUri.getScheme(), relativeUri.getAuthority(), relativeUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
             }
             else
             {
@@ -92,25 +92,25 @@ public class Url
                 {
                     if ( relativeUri.getPath().substring(0,1).equals("/") )
                     {
-                        return Url.createUrl(baseUri.getScheme(), baseUri.getAuthority(), relativeUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
+                        return UrlTools.createUrl(baseUri.getScheme(), baseUri.getAuthority(), relativeUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
                     }
                     else
                     {
                         File baseUrlPath = new File( baseUri.getPath() );
                         File newPath = new File(baseUrlPath.getParent(), relativeUri.getPath());
 
-                        return Url.createUrl(baseUri.getScheme(), baseUri.getAuthority(), newPath.getAbsolutePath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
+                        return UrlTools.createUrl(baseUri.getScheme(), baseUri.getAuthority(), newPath.getAbsolutePath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
                     }
                 }
                 else
                 {
                     if (relativeUri.getEncodedQuery() != null)
                     {
-                        return Url.createUrl(baseUri.getScheme(), baseUri.getAuthority(), baseUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
+                        return UrlTools.createUrl(baseUri.getScheme(), baseUri.getAuthority(), baseUri.getPath(), relativeUri.getEncodedQuery(), relativeUri.getEncodedFragment());
                     }
                     else if (relativeUri.getEncodedFragment() != null)
                     {
-                        return Url.createUrl(baseUri.getScheme(), baseUri.getAuthority(), baseUri.getPath(), null, relativeUri.getEncodedFragment());
+                        return UrlTools.createUrl(baseUri.getScheme(), baseUri.getAuthority(), baseUri.getPath(), null, relativeUri.getEncodedFragment());
                     }
                 }
             }
@@ -155,10 +155,10 @@ public class Url
             return null;
         }
 
-        return "http://www.google.by/search?q=" + query;
+        return GOOGLE_SEARCH_URL + query;
     }
 
-    public static String getShortHost(String url)
+    public static String getShortHostName(String url)
     {
         String host = Uri.parse( url ).getHost();
 
@@ -204,13 +204,12 @@ public class Url
 
             if (contains && n>=3)
             {
-                return String.format("%s.%s.%s", parts[n-3], parts[n-2], parts[n-1]);
+                return String.format("%s.%s.%s", parts[n - 3], parts[n - 2], parts[n - 1]);
             }
             else
             {
-                return String.format("%s.%s", parts[n-2], parts[n-1]);
+                return String.format("%s.%s", parts[n - 2], parts[n - 1]);
             }
         }
-
     }
 }
