@@ -186,7 +186,10 @@ public class HttpRequest
     public HttpRequest setFollowRedirectsFlag(boolean followRedirectsFlag)
     {
         if (this.connection != null)
-            this.connection.setInstanceFollowRedirects( followRedirectsFlag );
+        {
+            this.connection.setInstanceFollowRedirects(followRedirectsFlag);
+            HttpURLConnection.setFollowRedirects( followRedirectsFlag );
+        }
 
         return this;
     }
@@ -246,7 +249,8 @@ public class HttpRequest
     {
         if (this.connection != null)
         {
-            this.connection.setUseCaches(false);
+            this.connection.setUseCaches( false );
+            this.setFollowRedirectsFlag( true );
         }
     }
 
