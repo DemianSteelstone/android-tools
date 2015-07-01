@@ -236,6 +236,12 @@ public class HttpRequest
         }.execute();
     }
 
+    public void cancel()
+    {
+        if (this.connection != null)
+            this.connection.disconnect();
+    }
+
     private void init()
     {
         if (this.connection != null)
