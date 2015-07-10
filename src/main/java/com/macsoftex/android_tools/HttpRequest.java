@@ -234,7 +234,8 @@ public class HttpRequest
             @Override
             protected void onPostExecute(HttpResponse response)
             {
-                event.responseDidReceive( response );
+                if (event != null)
+                    event.responseDidReceive( response );
             }
         }.execute();
     }
