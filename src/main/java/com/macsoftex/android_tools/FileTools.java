@@ -6,6 +6,7 @@ import android.content.res.Resources;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -121,7 +122,7 @@ public class FileTools
         return str;
     }
 
-    public static void saveTextFile(java.io.File file, String text)
+    public static void saveTextFile(File file, String text)
     {
         if (file==null || text==null)
             return;
@@ -154,7 +155,7 @@ public class FileTools
         }
     }
 
-    public static String loadTextFile( java.io.File file )
+    public static String loadTextFile( File file )
     {
         String text = null;
 
@@ -174,13 +175,13 @@ public class FileTools
 
     public static void saveTextFileToInternalStorage(final String fileName, final String text, Context ctx)
     {
-        java.io.File file = ctx.getFileStreamPath( fileName );
+        File file = ctx.getFileStreamPath( fileName );
         saveTextFile(file, text);
     }
 
     public static String loadTextFileFromInternalStorage(String fileName, Context ctx)
     {
-        java.io.File file = ctx.getFileStreamPath( fileName );
+        File file = ctx.getFileStreamPath( fileName );
         return loadTextFile( file );
     }
 
@@ -231,7 +232,7 @@ public class FileTools
 
     public static String getValidFileName(String fileName)
     {
-        return fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
+        return fileName.replaceAll("\\W+", "_").trim();
     }
 
     public static String getFileNameWithoutExtension(String fileName)
@@ -244,13 +245,16 @@ public class FileTools
         return fileName;
     }
 
-    public static boolean copyFile(java.io.File src, java.io.File dst)
+    public static boolean copyFile(File src, File dst)
     {
         return copyFile(src, dst, true);
     }
 
-    public static boolean copyFile(java.io.File src, java.io.File dst, boolean overwrite)
+    public static boolean copyFile(File src, File dst, boolean overwrite)
     {
+        if ( !src.isFile() )
+            return false;
+
         if ( dst.exists() )
         {
             if ( overwrite )
@@ -285,14 +289,14 @@ public class FileTools
         return dst.exists();
     }
 
-    public static boolean deleteFile(java.io.File file)
+    public static boolean deleteFile(File file)
     {
         if ( file.isDirectory() )
         {
             String[] children = file.list();
 
             for (String child : children)
-                deleteFile( new java.io.File(file, child) );
+                deleteFile( new File(file, child) );
         }
         else
         {

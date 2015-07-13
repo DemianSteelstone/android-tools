@@ -5,11 +5,16 @@ package com.macsoftex.android_tools;
  */
 public class StringTools
 {
-    public static java.lang.String ellipsize(java.lang.String str, int maxLength)
+    public static String ellipsize(String text, int maxLength)
     {
-        if (str == null || str.length() < maxLength)
-            return str;
+        return ellipsize(text, maxLength, "...");
+    }
 
-        return str.substring(0, maxLength) + "...";
+    public static String ellipsize(String text, int maxLength, String ellipStr)
+    {
+        if (text == null || text.length() < maxLength)
+            return text;
+
+        return text.substring(0, maxLength) + ellipStr;
     }
 }
