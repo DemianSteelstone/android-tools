@@ -1,5 +1,8 @@
 package com.macsoftex.android_tools;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
@@ -210,6 +213,20 @@ public class UrlTools
             {
                 return String.format("%s.%s", parts[n - 2], parts[n - 1]);
             }
+        }
+    }
+
+    public static void openUriInBrowser(Uri uri, Context ctx)
+    {
+        try
+        {
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setData( uri );
+            ctx.startActivity( intent );
+        }
+        catch (ActivityNotFoundException e)
+        {
+            e.printStackTrace();
         }
     }
 }
