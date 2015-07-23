@@ -317,6 +317,11 @@ public class HttpRequest
             catch (IOException e)
             {
                 e.printStackTrace();
+
+                this.data = null;
+                this.headers = null;
+                this.contentLength = 0;
+                this.resposeCode = 0;
             }
         }
 
@@ -327,6 +332,9 @@ public class HttpRequest
 
         public String getText()
         {
+            if (this.data == null)
+                return null;
+
             return new String( this.data );
         }
 
