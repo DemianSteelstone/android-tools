@@ -124,7 +124,7 @@ public class UrlTools
 
     public interface ValidHostResultEvent
     {
-        public void validHostResult(boolean valid);
+        void validHostResult(boolean valid);
     }
 
     public static void isValidHost(final String host, final ValidHostResultEvent handler)
