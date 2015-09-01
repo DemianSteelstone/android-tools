@@ -9,15 +9,17 @@ import android.net.Uri;
  */
 public class MarketTools
 {
-    public static void openApplicationPageInGooglePlayMarket(Context ctx, String appPackageName)
+    public static void openAppPageInMarket(Context ctx, String appPackageID)
     {
         try
         {
-            ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+            ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageID)));
         }
         catch (android.content.ActivityNotFoundException e)
         {
             e.printStackTrace();
+
+            ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageID)));
         }
     }
 }
