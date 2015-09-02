@@ -9,7 +9,7 @@ import android.net.Uri;
  */
 public class MarketTools
 {
-    public static void openAppPageInMarket(Context ctx, String appPackageID)
+    public static void openAppPageInPlayStore(Context ctx, String appPackageID)
     {
         try
         {
