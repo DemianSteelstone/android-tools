@@ -3,6 +3,7 @@ package com.macsoftex.android_tools;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 
 /**
@@ -10,13 +11,32 @@ import android.net.Uri;
  */
 public class MediaTools
 {
-    public static void playVideoWithOtherApp(Uri uri, Context ctx)
+    public static boolean playVideoWithApp(Uri uri, String appPackageName, Context context)
     {
         try
         {
-            Intent i = new Intent( Intent.ACTION_VIEW );
-            i.setDataAndType(uri, "video/*");
-            ctx.startActivity( i );
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setDataAndType(uri, "video/*");
+            intent.setPackage(appPackageName);
+            context.startActivity(intent);
+
+            return true;
+        }
+        catch (ActivityNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static void playVideoWithOtherApp(Uri uri, Context context)
+    {
+        try
+        {
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setDataAndType(uri, "video/*");
+            context.startActivity(intent);
         }
         catch (ActivityNotFoundException e)
         {
@@ -24,13 +44,13 @@ public class MediaTools
         }
     }
 
-    public static void openImageWithOtherApp(Uri uri, Context ctx)
+    public static void openImageWithOtherApp(Uri uri, Context context)
     {
         try
         {
-            Intent i = new Intent( Intent.ACTION_VIEW );
-            i.setDataAndType(uri, "image/*");
-            ctx.startActivity( i );
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setDataAndType(uri, "image/*");
+            context.startActivity(intent);
         }
         catch (ActivityNotFoundException e)
         {
