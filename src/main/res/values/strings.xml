@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android Tools</string>
+
+    <string name="open_with">Open with</string>
 </resources>

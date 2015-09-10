@@ -3,13 +3,18 @@ package com.macsoftex.android_tools;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
 import java.io.File;
 import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alex-v on 25.09.14.
@@ -216,13 +221,50 @@ public class UrlTools
         }
     }
 
-    public static void openUriInBrowser(Uri uri, Context ctx)
+    public static void openUriInOtherApp(Uri uri, Context context)
     {
         try
         {
             Intent intent = new Intent( Intent.ACTION_VIEW );
             intent.setData( uri );
-            ctx.startActivity( intent );
+            context.startActivity( intent );
+        }
+        catch (ActivityNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openUriInOtherAppExceptAppList(Uri uri, List<String> exceptAppPackageNameList, Context context)
+    {
+        try
+        {
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setData( uri );
+
+            PackageManager packageManager = context.getPackageManager();
+            List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+            ArrayList<Intent> targetIntents = new ArrayList<Intent>();
+
+            for (ResolveInfo currentInfo : activities)
+            {
+                final String packageName = currentInfo.activityInfo.packageName;
+
+                if ( !exceptAppPackageNameList.contains( packageName ) )
+                {
+                    Intent targetIntent = new Intent( Intent.ACTION_VIEW );
+                    targetIntent.setData( uri );
+                    targetIntent.setPackage( packageName );
+                    targetIntents.add( targetIntent );
+                }
+            }
+
+            if (targetIntents.size() > 0)
+            {
+                Intent chooserIntent = Intent.createChooser(targetIntents.remove(0), context.getString( R.string.open_with ));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetIntents.toArray(new Parcelable[] {}));
+                context.startActivity( chooserIntent );
+            }
         }
         catch (ActivityNotFoundException e)
         {
