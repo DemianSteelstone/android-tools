@@ -3,7 +3,6 @@ package com.macsoftex.android_tools;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -217,7 +216,7 @@ public class HttpRequest
         }
 
         HttpResponse response = new HttpResponse( this.connection );
-        this.connection.disconnect();
+        this.cancel();
 
         return response;
     }
@@ -243,7 +242,13 @@ public class HttpRequest
     public void cancel()
     {
         if (this.connection != null)
-            this.connection.disconnect();
+        {
+            try {
+                this.connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void init()
