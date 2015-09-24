@@ -23,7 +23,6 @@ public class FileTools
 {
     public static String getStringFromInputStream(InputStream is)
     {
-
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
 
