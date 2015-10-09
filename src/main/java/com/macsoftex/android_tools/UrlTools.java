@@ -96,7 +96,7 @@ public class UrlTools
             }
             else
             {
-                if (relativeUri.getPath() != null)
+                if (relativeUri.getPath() != null && relativeUri.getPath().length() > 0)
                 {
                     if ( relativeUri.getPath().substring(0,1).equals("/") )
                     {
