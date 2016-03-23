@@ -29,8 +29,21 @@ public class AppTools
         return context.getApplicationContext().getPackageName();
     }
 
+    public static String getAppeName(Context context)
+    {
+        return context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
+    }
+
     public static String getCurrentLanguageCode()
     {
         return Locale.getDefault().getLanguage();
+    }
+
+    public static String getDeviceName() {
+        return android.os.Build.MODEL;
+    }
+
+    public static String getOSVersion() {
+        return android.os.Build.VERSION.RELEASE;
     }
 }
