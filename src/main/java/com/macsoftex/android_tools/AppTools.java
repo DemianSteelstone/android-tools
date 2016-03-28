@@ -40,7 +40,7 @@ public class AppTools
     }
 
     public static String getDeviceName() {
-        return android.os.Build.MODEL;
+        return android.os.Build.BRAND + " " + android.os.Build.MODEL;
     }
 
     public static String getOSVersion() {
