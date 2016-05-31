@@ -12,12 +12,9 @@ public class AppTools
 {
     public static String getAppVersionName(Context context)
     {
-        try
-        {
+        try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -45,5 +42,15 @@ public class AppTools
 
     public static String getOSVersion() {
         return android.os.Build.VERSION.RELEASE;
+    }
+
+    public static boolean isPackageInstalled(Context context, String packageId) {
+        try {
+            context.getPackageManager().getPackageInfo(packageId, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+
+        return true;
     }
 }
