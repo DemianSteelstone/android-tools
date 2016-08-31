@@ -17,4 +17,11 @@ public class StringTools
 
         return text.substring(0, maxLength) + ellipStr;
     }
+
+    public static String addLineToText(String text, String line) {
+        if (text==null || text.length()==0)
+            return line;
+
+        return text + "\n" + line;
+    }
 }
