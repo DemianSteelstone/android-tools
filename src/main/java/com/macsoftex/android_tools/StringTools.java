@@ -24,4 +24,14 @@ public class StringTools
 
         return text + "\n" + line;
     }
+
+    public static String stringByCapitalizingFirstLetterInString(String str) {
+        if (str == null)
+            return "";
+
+        if (str.length() > 2)
+            return str.substring(0,1).toUpperCase() + str.substring(1);
+
+        return str.toUpperCase();
+    }
 }
