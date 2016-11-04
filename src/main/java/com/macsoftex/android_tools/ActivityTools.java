@@ -1,5 +1,6 @@
 package com.macsoftex.android_tools;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.Surface;
@@ -50,16 +51,24 @@ public class ActivityTools
         activity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
     }
 
-    public static void hideKeyboard(android.app.Activity activity)
-    {
+    public static void hideKeyboard(android.app.Activity activity) {
         final View view = activity.getCurrentFocus();
+        hideKeyboard(activity, view);
+    }
 
-        if (view != null)
-        {
-            final InputMethodManager manager = (InputMethodManager)activity.getSystemService( android.app.Activity.INPUT_METHOD_SERVICE );
+    public static void hideKeyboard(Context context, View view) {
+        if (view != null) {
+            final InputMethodManager manager = (InputMethodManager)context.getSystemService( android.app.Activity.INPUT_METHOD_SERVICE );
 
             if (manager != null)
                 manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    public static void showKeyboard(Context context) {
+        final InputMethodManager manager = (InputMethodManager)context.getSystemService( android.app.Activity.INPUT_METHOD_SERVICE );
+
+        if (manager != null)
+            manager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 }
