@@ -77,7 +77,7 @@ public class FileTools
                 byteBuffer.write(buffer, 0, len);
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

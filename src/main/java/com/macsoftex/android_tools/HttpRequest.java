@@ -319,7 +319,7 @@ public class HttpRequest
                 this.contentLength = connection.getContentLength();
                 this.resposeCode = connection.getResponseCode();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
 
