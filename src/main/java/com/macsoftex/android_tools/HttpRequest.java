@@ -303,30 +303,21 @@ public class HttpRequest
     }
 
 
-    public class HttpResponse
-    {
+    public class HttpResponse {
         private byte[] data;
         private Map<String, List<String>> headers;
         private int resposeCode;
         private int contentLength;
 
-        public HttpResponse(HttpURLConnection connection)
-        {
-            try
-            {
+        public HttpResponse(HttpURLConnection connection) {
+            try {
                 this.data = FileTools.getBytesFromInputStream( connection.getInputStream() );
                 this.headers = connection.getHeaderFields();
                 this.contentLength = connection.getContentLength();
                 this.resposeCode = connection.getResponseCode();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception | OutOfMemoryError e) {
                 e.printStackTrace();
-
-                this.data = null;
-                this.headers = null;
-                this.contentLength = 0;
-                this.resposeCode = 0;
+                resetData();
             }
         }
 
@@ -356,6 +347,13 @@ public class HttpRequest
         public int getResposeCode()
         {
             return this.resposeCode;
+        }
+
+        private void resetData () {
+            this.data = null;
+            this.headers = null;
+            this.contentLength = 0;
+            this.resposeCode = 0;
         }
     }
 }
