@@ -244,6 +244,15 @@ public class FileTools
         return fileName;
     }
 
+    public static String getExtensionFromFileName(String fileName) {
+        final int pos = fileName.lastIndexOf('.');
+
+        if (pos > 0)
+            return fileName.substring(pos + 1);
+
+        return "";
+    }
+
     public static boolean copyFile(File src, File dst)
     {
         return copyFile(src, dst, true);
