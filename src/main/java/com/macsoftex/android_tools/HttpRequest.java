@@ -210,7 +210,7 @@ public class HttpRequest
         {
             this.connection.connect();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
