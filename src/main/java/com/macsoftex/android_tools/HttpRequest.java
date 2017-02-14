@@ -1,7 +1,5 @@
 package com.macsoftex.android_tools;
 
-import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -221,22 +219,17 @@ public class HttpRequest
         return response;
     }
 
-    public void sendAsynchronously(final HttpResponseEvent event)
-    {
-        new AsyncTask<Void, Void, HttpResponse>() {
+    public void sendAsynchronously(final HttpResponseEvent event) {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            protected HttpResponse doInBackground(Void... params)
-            {
-                return HttpRequest.this.send();
-            }
+            public void run() {
+                HttpResponse response = HttpRequest.this.send();
 
-            @Override
-            protected void onPostExecute(HttpResponse response)
-            {
                 if (event != null)
-                    event.responseDidReceive( response );
+                    event.responseDidReceive(response);
             }
-        }.execute();
+        });
+        thread.start();
     }
 
     public void cancel()
