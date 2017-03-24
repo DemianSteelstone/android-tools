@@ -184,45 +184,37 @@ public class FileTools
         return loadTextFile( file );
     }
 
-    public static void saveObjectToInternalStorage(String fileName, Object object, Context ctx)
-    {
-        try
-        {
-            FileOutputStream f = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
+    public static boolean saveObjectToInternalStorage(Context context, String fileName, Object object) {
+        try {
+            FileOutputStream fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
-            ObjectOutputStream obj = new ObjectOutputStream( f );
-            obj.writeObject( object );
-            obj.flush();
-            obj.close();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.flush();
+            objectOutputStream.close();
 
-            f.close();
-        }
-        catch (IOException e)
-        {
+            fileOutputStream.close();
+
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
-    public static Object loadObjectFromInternalStorage(String fileName, Context ctx)
-    {
+    public static Object loadObjectFromInternalStorage(Context context, String fileName) {
         Object returnObject = null;
 
-        try
-        {
-            FileInputStream f = ctx.openFileInput(fileName);
+        try {
+            FileInputStream fileInputStream = context.openFileInput(fileName);
 
-            ObjectInputStream obj = new ObjectInputStream(f);
-            returnObject = obj.readObject();
-            obj.close();
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            returnObject = objectInputStream.readObject();
+            objectInputStream.close();
 
-            f.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
-        {
+            fileInputStream.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
