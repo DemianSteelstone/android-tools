@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import java.util.ArrayList;
+
 /**
  * Created by alex-v on 23.03.16.
  */
 public class EmailTools {
-    public static boolean sendEmail(Context context, String email, String subject, String body) {
+    public static boolean sendEmail(Context context, String email, String subject, String body, ArrayList<Uri> attachmentFiles) {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setType("message/rfc822");
@@ -17,6 +19,9 @@ public class EmailTools {
             intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
             intent.putExtra(Intent.EXTRA_SUBJECT, subject);
             intent.putExtra(Intent.EXTRA_TEXT, body);
+
+            if (attachmentFiles != null)
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentFiles);
 
             context.startActivity(intent);
 
