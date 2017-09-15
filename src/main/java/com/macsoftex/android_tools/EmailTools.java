@@ -14,6 +14,10 @@ import java.util.List;
  * Created by alex-v on 23.03.16.
  */
 public class EmailTools {
+    public static boolean sendEmail(Context context, String email, String subject, String body) {
+        return sendEmail(context, email, subject, body, null);
+    }
+
     public static boolean sendEmail(Context context, String email, String subject, String body, List<File> attachmentFiles) {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -40,7 +44,7 @@ public class EmailTools {
             String packageName = resolveInfos.get(0).activityInfo.packageName;
             String name = resolveInfos.get(0).activityInfo.name;
 
-            intent.setAction(Intent.ACTION_SEND);
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
             intent.setComponent(new ComponentName(packageName, name));
 
             context.startActivity(intent);
