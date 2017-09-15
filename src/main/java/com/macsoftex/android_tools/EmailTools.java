@@ -7,13 +7,14 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by alex-v on 23.03.16.
  */
 public class EmailTools {
-    public static boolean sendEmail(Context context, String email, String subject, String body, File attachmentFile) {
+    public static boolean sendEmail(Context context, String email, String subject, String body, List<File> attachmentFiles) {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setType("message/rfc822");
@@ -22,8 +23,14 @@ public class EmailTools {
             intent.putExtra(Intent.EXTRA_SUBJECT, subject);
             intent.putExtra(Intent.EXTRA_TEXT, body);
 
-            if (attachmentFile != null)
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(attachmentFile));
+            if (attachmentFiles != null) {
+                ArrayList<Uri> uriList = new ArrayList<>();
+
+                for (File file : attachmentFiles)
+                    uriList.add(Uri.fromFile(file));
+
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriList);
+            }
 
             List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
 
@@ -40,7 +47,6 @@ public class EmailTools {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

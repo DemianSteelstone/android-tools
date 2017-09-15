@@ -3,15 +3,12 @@ package com.macsoftex.android_tools;
 /**
  * Created by alex-v on 16.12.14.
  */
-public class StringTools
-{
-    public static String ellipsize(String text, int maxLength)
-    {
+public class StringTools {
+    public static String ellipsize(String text, int maxLength) {
         return ellipsize(text, maxLength, "...");
     }
 
-    public static String ellipsize(String text, int maxLength, String ellipStr)
-    {
+    public static String ellipsize(String text, int maxLength, String ellipStr) {
         if (text == null || text.length() < maxLength)
             return text;
 
@@ -27,7 +24,7 @@ public class StringTools
 
     public static String stringByCapitalizingFirstLetterInString(String str) {
         if (str == null)
-            return "";
+            return null;
 
         if (str.length() > 2)
             return str.substring(0,1).toUpperCase() + str.substring(1);

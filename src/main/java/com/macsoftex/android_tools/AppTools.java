@@ -8,31 +8,26 @@ import java.util.Locale;
 /**
  * Created by alex-v on 10.09.15.
  */
-public class AppTools
-{
-    public static String getAppVersionName(Context context)
-    {
+public class AppTools {
+    public static String getAppVersion(Context context) {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static String getAppPackageName(Context context)
-    {
+    public static String getAppPackageId(Context context) {
         return context.getApplicationContext().getPackageName();
     }
 
-    public static String getAppeName(Context context)
-    {
+    public static String getAppName(Context context) {
         return context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
     }
 
-    public static String getCurrentLanguageCode()
-    {
+    public static String getCurrentLanguageCode() {
         return Locale.getDefault().getLanguage();
     }
 
