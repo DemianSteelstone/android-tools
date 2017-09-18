@@ -1,6 +1,5 @@
 package com.macsoftex.android_tools;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -56,15 +55,15 @@ public class UrlTools {
         if (relativeUri.getAuthority() != null)
             builder.authority(relativeUri.getAuthority());
 
-        if (relativeUri.getPath() != null) {
-            if (relativeUri.getPath().charAt(0) == '/')
-                builder.path(relativeUri.getPath());
+        if (relativeUri.getEncodedPath() != null) {
+            if (relativeUri.getEncodedPath().charAt(0) == '/')
+                builder.encodedPath(relativeUri.getEncodedPath());
             else
-                builder.appendPath(relativeUri.getPath());
+                builder.appendEncodedPath(relativeUri.getEncodedPath());
         }
 
-        if (relativeUri.getQuery() != null)
-            builder.query(relativeUri.getQuery());
+        if (relativeUri.getEncodedQuery() != null)
+            builder.encodedQuery(relativeUri.getEncodedQuery());
 
         if (relativeUri.getFragment() != null)
             builder.fragment(relativeUri.getFragment());
