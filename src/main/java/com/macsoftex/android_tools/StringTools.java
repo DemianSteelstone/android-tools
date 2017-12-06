@@ -1,5 +1,8 @@
 package com.macsoftex.android_tools;
 
+import android.text.Html;
+import android.text.Spanned;
+
 /**
  * Created by alex-v on 16.12.14.
  */
@@ -30,5 +33,13 @@ public class StringTools {
             return str.substring(0,1).toUpperCase() + str.substring(1);
 
         return str.toUpperCase();
+    }
+
+    public static Spanned fromHtml(String html) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(html);
+        }
     }
 }
