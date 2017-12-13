@@ -2,8 +2,11 @@ package com.macsoftex.android_tools;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.provider.Settings;
 import android.view.Surface;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -63,5 +66,27 @@ public class ActivityTools {
 
         if (manager != null)
             manager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public static boolean showApplicationDetailsSettingsActivity(Activity activity, int requestCode) {
+        return showSystemActivity(activity, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, requestCode);
+    }
+
+    public static boolean showManageOverlayPermissionActivity(Activity activity, int requestCode) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M)
+            return false;
+
+        return showSystemActivity(activity, Settings.ACTION_MANAGE_OVERLAY_PERMISSION, requestCode);
+    }
+
+    public static boolean showSystemActivity(Activity activity, String action, int requestCode) {
+        try {
+            Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+            Intent intent = new Intent(action, uri);
+            activity.startActivityForResult(intent, requestCode);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
